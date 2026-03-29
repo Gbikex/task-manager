@@ -3,7 +3,7 @@ import styles from "./TaskForm.module.css";
 function TaskForm() {
   return (
     <div>
-      <div>
+      <div className={styles.divForm}>
         <p>Task Details</p>
         <form>
           <p>Title</p>

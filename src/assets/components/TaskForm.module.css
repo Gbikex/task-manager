@@ -1,3 +1,13 @@
 .fontColor {
   color: blueviolet;
 }
+
+.divForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+p {
+  text-align: center;
+}
