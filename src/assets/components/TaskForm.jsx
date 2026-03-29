@@ -2,7 +2,7 @@ import { useReducer } from "react";
 import styles from "./TaskForm.module.css";
 
 const InitialState = {
-  task: [],
+  tasks: [],
   titleInput: "",
   descriptionInput: "",
   statusInput: "",
@@ -24,6 +24,8 @@ function reducer(state, action) {
       return { ...state, priorityInput: action.payLoad };
     case "setDueDateInput":
       return { ...state, dueDateInput: action.payLoad };
+    case "setNewTask":
+      return { ...state, tasks: action.payLoad };
     default:
       throw new Error("Unknown action");
   }
@@ -31,10 +33,18 @@ function reducer(state, action) {
 
 function TaskForm() {
   const [
-    { titleInput, descriptionInput, statusInput, priorityInput, dueDateInput },
+    {
+      tasks,
+      titleInput,
+      descriptionInput,
+      statusInput,
+      priorityInput,
+      dueDateInput,
+    },
     dispatch,
   ] = useReducer(reducer, InitialState);
 
+  // Handle input values in the forms
   const handleTitleInput = function (e) {
     dispatch({ type: "setTitleInput", payLoad: e.target.value });
   };
@@ -54,6 +64,36 @@ function TaskForm() {
   const handleDueDateInput = function (e) {
     dispatch({ type: "setDueDateInput", payLoad: e.target.value });
   };
+
+  //Handle list of tasks
+  const handleAddTaskToList = function () {
+    const newTask = {
+      title: titleInput,
+      description: descriptionInput,
+      status: statusInput,
+      priority: priorityInput,
+      dueDate: dueDateInput,
+    };
+
+    dispatch({
+      type: "setNewTask",
+      payLoad: [...tasks, newTask],
+    });
+  };
+
+  function TaskDetails({ task }) {
+    return (
+      <div>
+        <ul>
+          <li>Title: {task.titleInput}</li>
+          <li>Description: {task.descriptionInput}</li>
+          <li>Status: {task.statusInput}</li>
+          <li>Priority: {task.priorityInput}</li>
+          <li>Due Date: {task.dueDateInput}</li>
+        </ul>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -75,8 +115,13 @@ function TaskForm() {
           <input value={dueDateInput} onChange={handleDueDateInput}></input>
         </form>
         <>
-          <button>Add</button>
+          <button onClick={handleAddTaskToList}>Add</button>
         </>
+      </div>
+      <div>
+        {tasks.map((task) => (
+          <TaskDetails task={task} />
+        ))}
       </div>
     </div>
   );
